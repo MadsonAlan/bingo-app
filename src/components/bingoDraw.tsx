@@ -71,22 +71,38 @@ export const BingoDraw = () => {
 
   // Modal de Visualização
   const NumbersModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full">
-        <h3 className="text-lg font-bold mb-4">Números Sorteados</h3>
-        <div className="grid grid-cols-5 gap-2">
-          {selectedNumbers.map((num) => (
-            <span key={num} className="bg-gray-100 p-2 rounded text-center">
-              {num}
-            </span>
-          ))}
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl border-4 border-red-600 overflow-hidden">
+        <div className="bg-gradient-to-r from-red-600 to-orange-500 p-4">
+          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <span>🔢 Números Sorteados</span>
+            <span className="text-sm font-medium">({selectedNumbers.length} bolas)</span>
+          </h3>
         </div>
-        <button
-          onClick={() => setShowNumbersModal(false)}
-          className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700"
-        >
-          Fechar
-        </button>
+        
+        <div className="p-6">
+          <div className="grid grid-cols-5 gap-2 md:gap-3">
+            {selectedNumbers.map((num, index) => (
+              <div 
+                key={num} 
+                className="relative bg-red-50 rounded-lg p-2 text-center animate-scale-in"
+                style={{ animationDelay: `${index * 20}ms` }}
+              >
+                <span className="font-medium text-red-600">{num}</span>
+                <span className="absolute top-0 right-0 -mt-2 -mr-1 text-xs font-bold text-orange-500">
+                  {BingoService.getColumnForNumber(num)}
+                </span>
+              </div>
+            ))}
+          </div>
+          
+          <button
+            onClick={() => setShowNumbersModal(false)}
+            className="mt-6 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-all"
+          >
+            Fechar Visualização
+          </button>
+        </div>
       </div>
     </div>
   );
