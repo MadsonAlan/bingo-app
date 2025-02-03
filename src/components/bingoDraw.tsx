@@ -21,8 +21,12 @@ export const BingoDraw = () => {
     const savedWinners = bingoService.getWinners();
     setDrawnNumbers(savedNumbers);
     setWinners(savedWinners);
-    if (savedNumbers.length > 0) {
-      setCurrentDraw(savedNumbers[ savedNumbers.length - 1 ]);
+    if (bingoService.getDrawnNumbers().length > 0) {
+      const last = bingoService.getDrawnNumbers().slice(-1)[0];
+      setCurrentDraw({ 
+        number: last.number,
+        column: BingoService.getColumnForNumber(last.number)
+      });
     }
   }, []);
 
@@ -67,7 +71,7 @@ export const BingoDraw = () => {
       drawnNumbers: [ ...numbers ],
     };
     bingoService.addWinner(newWinner);
-    setWinners((prev) => [ newWinner, ...prev ]);
+    setWinners(bingoService.getWinners());
   };
 
   const handleShowDetails = (numbers: number[]) => {

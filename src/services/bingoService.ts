@@ -80,13 +80,13 @@ export class BingoService {
 
   // Adiciona um ganhador ao ranking
   addWinner(winner: Winner) {
-    this.winners.push(winner);
+    this.winners = [winner, ...this.winners];
     this.saveGameState();
   }
 
   // Obtém a lista de ganhadores
   getWinners(): Winner[] {
-    return this.winners;
+    return [...this.winners]; 
   }
 
   resetGame() {
