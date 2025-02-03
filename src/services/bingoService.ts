@@ -1,3 +1,5 @@
+import { Winner } from "@/types/winnerTypes";
+
 // src/services/bingoService.ts
 export type BingoColumn = {
   letter: string;
@@ -15,10 +17,12 @@ export const BINGO_COLUMNS: BingoColumn[] = [
 
 type GameState = {
   drawnNumbers: number[];
+  winners: Winner[];
 };
 
 export class BingoService {
   private drawnNumbers: number[] = [];
+  private winners: Winner[] = []; // Adiciona os ganhadores
 
   constructor() {
     this.loadGameState();
@@ -27,6 +31,7 @@ export class BingoService {
   private saveGameState() {
     const gameState: GameState = {
       drawnNumbers: this.drawnNumbers,
+      winners: this.winners, // Salva os ganhadores
     };
     localStorage.setItem("bingoGame", JSON.stringify(gameState));
   }
@@ -35,8 +40,9 @@ export class BingoService {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("bingoGame");
       if (saved) {
-        const { drawnNumbers } = JSON.parse(saved) as GameState;
+        const { drawnNumbers, winners } = JSON.parse(saved) as GameState;
         this.drawnNumbers = drawnNumbers;
+        this.winners = winners || []; // Carrega os ganhadores
       }
     }
   }
@@ -72,8 +78,20 @@ export class BingoService {
     return column?.letter || "";
   }
 
+  // Adiciona um ganhador ao ranking
+  addWinner(winner: Winner) {
+    this.winners.push(winner);
+    this.saveGameState();
+  }
+
+  // Obtém a lista de ganhadores
+  getWinners(): Winner[] {
+    return this.winners;
+  }
+
   resetGame() {
     this.drawnNumbers = [];
+    this.winners = [];
     localStorage.removeItem("bingoGame");
   }
 }

@@ -14,9 +14,13 @@ export const BingoDraw = () => {
   const [ showNumbersModal, setShowNumbersModal ] = useState(false);
   const [ winners, setWinners ] = useState<Winner[]>([]);
   const [ selectedNumbers, setSelectedNumbers ] = useState<number[]>([]);
+
+
   useEffect(() => {
     const savedNumbers = bingoService.getDrawnNumbers();
+    const savedWinners = bingoService.getWinners();
     setDrawnNumbers(savedNumbers);
+    setWinners(savedWinners);
     if (savedNumbers.length > 0) {
       setCurrentDraw(savedNumbers[ savedNumbers.length - 1 ]);
     }
@@ -52,6 +56,7 @@ export const BingoDraw = () => {
     bingoService.resetGame();
     setCurrentDraw(null);
     setDrawnNumbers([]);
+    setWinners([]);
   };
 
   const handleAddWinner = (name: string, numbers: number[]) => {
@@ -61,6 +66,7 @@ export const BingoDraw = () => {
       timestamp: new Date().toISOString(),
       drawnNumbers: [ ...numbers ],
     };
+    bingoService.addWinner(newWinner);
     setWinners((prev) => [ newWinner, ...prev ]);
   };
 

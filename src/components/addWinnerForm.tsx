@@ -1,3 +1,4 @@
+"use client"
 // src/components/AddWinnerForm.tsx
 import { useState } from "react";
 
