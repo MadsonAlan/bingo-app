@@ -1,5 +1,4 @@
 "use client"
-// src/components/BingoDraw.tsx
 import { useEffect, useState } from "react";
 import { BINGO_COLUMNS, BingoService } from "../services/bingoService";
 import { BingoBall } from "./bingoBall";
@@ -50,14 +49,6 @@ export const BingoDraw = () => {
     setDrawnNumbers([]);
   };
 
-  // Agrupa números por coluna
-  const groupedNumbers = BINGO_COLUMNS.map((col) => ({
-    letter: col.letter,
-    numbers: drawnNumbers
-      .filter((n) => n.column === col.letter)
-      .map((n) => n.number)
-      .sort((a, b) => a - b),
-  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 to-red-100 p-4 md:p-8">
@@ -72,7 +63,6 @@ export const BingoDraw = () => {
       {/* Main Content */}
       <div className="mx-auto max-w-6xl">
         {/* Current Number Section */}
-        // src/components/BingoDraw.tsx (parte relevante)
         <section className="mb-12 rounded-xl bg-white p-6 shadow-2xl">
           <div className="flex flex-col items-center gap-6">
             {/* Bola sorteada */}
