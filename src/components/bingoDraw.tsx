@@ -2,13 +2,18 @@
 import { useEffect, useState } from "react";
 import { BINGO_COLUMNS, BingoService } from "../services/bingoService";
 import { BingoBall } from "./bingoBall";
+import { AddWinnerForm } from "./addWinnerForm";
+import { WinnersRanking } from "./winnersRanking";
+import { Winner } from "@/types/winnerTypes";
 
 const bingoService = new BingoService();
 
 export const BingoDraw = () => {
   const [ currentDraw, setCurrentDraw ] = useState<{ number: number; column: string } | null>(null);
   const [ drawnNumbers, setDrawnNumbers ] = useState<{ number: number; column: string }[]>([]);
-
+  const [ showNumbersModal, setShowNumbersModal ] = useState(false);
+  const [ winners, setWinners ] = useState<Winner[]>([]);
+  const [ selectedNumbers, setSelectedNumbers ] = useState<number[]>([]);
   useEffect(() => {
     const savedNumbers = bingoService.getDrawnNumbers();
     setDrawnNumbers(savedNumbers);
@@ -49,6 +54,42 @@ export const BingoDraw = () => {
     setDrawnNumbers([]);
   };
 
+  const handleAddWinner = (name: string, numbers: number[]) => {
+    const newWinner: Winner = {
+      id: crypto.randomUUID(),
+      name,
+      timestamp: new Date().toISOString(),
+      drawnNumbers: [ ...numbers ],
+    };
+    setWinners((prev) => [ newWinner, ...prev ]);
+  };
+
+  const handleShowDetails = (numbers: number[]) => {
+    setSelectedNumbers(numbers);
+    setShowNumbersModal(true);
+  };
+
+  // Modal de Visualização
+  const NumbersModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg p-6 max-w-md w-full">
+        <h3 className="text-lg font-bold mb-4">Números Sorteados</h3>
+        <div className="grid grid-cols-5 gap-2">
+          {selectedNumbers.map((num) => (
+            <span key={num} className="bg-gray-100 p-2 rounded text-center">
+              {num}
+            </span>
+          ))}
+        </div>
+        <button
+          onClick={() => setShowNumbersModal(false)}
+          className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700"
+        >
+          Fechar
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 to-red-100 p-4 md:p-8">
@@ -143,6 +184,15 @@ export const BingoDraw = () => {
           </svg>
         </button>
       </div>
+      <AddWinnerForm
+        currentNumbers={drawnNumbers.map((n) => n.number)}
+        onAddWinner={handleAddWinner}
+      />
+      <WinnersRanking
+        winners={winners}
+        onShowDetails={handleShowDetails}
+      />
+      {showNumbersModal && <NumbersModal />}
     </div>
   );
 };
