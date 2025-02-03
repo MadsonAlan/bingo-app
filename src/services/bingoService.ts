@@ -32,10 +32,12 @@ export class BingoService {
   }
 
   private loadGameState() {
-    const saved = localStorage.getItem("bingoGame");
-    if (saved) {
-      const { drawnNumbers } = JSON.parse(saved) as GameState;
-      this.drawnNumbers = drawnNumbers;
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("bingoGame");
+      if (saved) {
+        const { drawnNumbers } = JSON.parse(saved) as GameState;
+        this.drawnNumbers = drawnNumbers;
+      }
     }
   }
 
@@ -64,7 +66,9 @@ export class BingoService {
   }
 
   static getColumnForNumber(num: number): string {
-    const column = BINGO_COLUMNS.find((col) => num >= col.min && num <= col.max);
+    const column = BINGO_COLUMNS.find(
+      (col) => num >= col.min && num <= col.max
+    );
     return column?.letter || "";
   }
 
