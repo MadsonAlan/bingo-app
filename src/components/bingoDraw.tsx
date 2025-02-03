@@ -72,18 +72,37 @@ export const BingoDraw = () => {
       {/* Main Content */}
       <div className="mx-auto max-w-6xl">
         {/* Current Number Section */}
+        // src/components/BingoDraw.tsx (parte relevante)
         <section className="mb-12 rounded-xl bg-white p-6 shadow-2xl">
           <div className="flex flex-col items-center gap-6">
+            {/* Bola sorteada */}
             <div className="w-full max-w-xs">
               {currentDraw && <BingoBall {...currentDraw} />}
             </div>
 
-            <button
-              onClick={handleDraw}
-              className="w-full max-w-xs transform rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-8 py-4 text-xl font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-red-300 md:max-w-sm"
-            >
-              🎉 Sortear Próximo Número
-            </button>
+            {/* Container dos botões */}
+            <div className="flex w-full max-w-xs flex-col gap-4 md:max-w-sm md:flex-row md:items-center">
+              <button
+                onClick={handleDraw}
+                className="flex-1 transform rounded-lg bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-4 text-lg font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300 md:px-8 md:text-xl"
+              >
+                {drawnNumbers.length === 0 ? (
+                  '🎉 Iniciar Sorteio!'
+                ) : (
+                  '🔔 Sortear Próximo Número'
+                )}
+              </button>
+
+              <button
+                onClick={handleReset}
+                disabled={drawnNumbers.length === 0}
+                className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-6 py-4 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-red-300 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-lg md:px-4"
+                title="Reiniciar jogo completo"
+              >
+                <span className="md:hidden">🔄 Reiniciar</span>
+                <span className="hidden md:inline">🔄</span>
+              </button>
+            </div>
           </div>
         </section>
 
