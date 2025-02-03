@@ -2,27 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+/* src/styles/globals.css */
+/* globals.css */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --primary: 0 72% 51%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 45.9 100% 51%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --surface: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --primary: 0 72% 51%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 45.9 100% 51%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --surface: 217.2 32.6% 17.5%;
+  --border: 217.2 32.6% 17.5%;
+}
+
+/* Aplique as variáveis nos elementos */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Exemplo para componentes */
+.bg-surface {
+  background-color: var(--color-surface);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-primary: #dc2626;
+    --color-background: #ffffff;
+    --color-text: #1a1a1a;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
 
 
 
 /* Adicione a animação ao Tailwind */
+@layer utilities {
+  .text-primary { color: hsl(var(--primary)) }
+  .bg-primary { background-color: hsl(var(--primary)) }
+  .text-accent { color: hsl(var(--accent)) }
+  .bg-surface { background-color: hsl(var(--surface)) }
+  .bg-muted { background-color: hsl(var(--muted)) }
+  .text-muted-foreground { color: hsl(var(--muted-foreground)) }
+  .border-border { border-color: hsl(var(--border)) }
+}
 @layer utilities {
   .animate-scale-up {
     animation: scaleUp 0.5s ease-in-out;
