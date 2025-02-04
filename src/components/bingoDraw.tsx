@@ -43,8 +43,31 @@ export const BingoDraw = () => {
     localStorage.setItem('bingoSettings', JSON.stringify(settings));
   }, [ settings ]);
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
+    if (settings.continuousDraw) {
+      interval = setInterval(() => {
+        if (drawnNumbers.length < 75) { // Verifica se ainda há números para sortear
+          handleDraw();
+        } else {
+          setSettings(s => ({ ...s, continuousDraw: false })); // Desativa ao terminar
+        }
+      }, 3000); // Intervalo de 3 segundos
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [ settings.continuousDraw, drawnNumbers.length ]);
+
 
   const handleDraw = async () => {
+    if (drawnNumbers.length >= 75) {
+      setSettings(s => ({ ...s, continuousDraw: false }));
+      return;
+    }
+
     const drawResult = bingoService.drawNumber();
 
     setCurrentDraw(drawResult);
@@ -243,6 +266,11 @@ export const BingoDraw = () => {
         {showNumbersModal && <NumbersModal />}
       </div>
       <SettingsMenu settings={settings} setSettings={setSettings} />
+      {settings.continuousDraw && (
+        <div className="fixed bottom-20 left-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
+          Sorteio automático ativo
+        </div>
+      )}
     </div>
   );
 };
