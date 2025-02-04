@@ -17,12 +17,8 @@ export const BingoDraw = () => {
   const [ showNumbersModal, setShowNumbersModal ] = useState(false);
   const [ winners, setWinners ] = useState<Winner[]>([]);
   const [ selectedNumbers, setSelectedNumbers ] = useState<number[]>([]);
-  const [ settings, setSettings ] = useState<Settings>(SettingsService || {
-    volume: Math.floor(1),
-    theme: 'light',
-    autoRepeat: true,
-    continuousDraw: false
-  });
+  const [ settings, setSettings ] = useState<Settings>(SettingsService);
+  const [ isPlaying, setIsPlaying ] = useState(false);
 
   useEffect(() => {
     const savedNumbers = bingoService.getDrawnNumbers();
@@ -49,6 +45,8 @@ export const BingoDraw = () => {
     if (settings.continuousDraw) {
       interval = setInterval(() => {
         if (drawnNumbers.length < 75) { // Verifica se ainda há números para sortear
+          if (isPlaying) setTimeout(() => {
+          }, 6000);
           handleDraw();
         } else {
           setSettings(s => ({ ...s, continuousDraw: false })); // Desativa ao terminar
@@ -62,7 +60,9 @@ export const BingoDraw = () => {
   }, [ settings.continuousDraw, drawnNumbers.length ]);
 
 
-  const handleDraw = async () => {
+  const handleDraw = async (): Promise<void> => {
+    
+    setIsPlaying(true);
     if (drawnNumbers.length >= 75) {
       setSettings(s => ({ ...s, continuousDraw: false }));
       return;
@@ -94,8 +94,13 @@ export const BingoDraw = () => {
           `${drawResult.column} ${drawResult.number}. Repetindo: ${drawResult.column} ${drawResult.number}`
         );
         utterance.lang = 'pt-BR';
-        window.speechSynthesis.speak(utterance);
+        await new Promise<void>(resolve => {
+          utterance.onend = () => resolve();
+          window.speechSynthesis.speak(utterance);
+        });
       }
+    } finally {
+      setIsPlaying(false);
     }
 
   };
@@ -186,6 +191,7 @@ export const BingoDraw = () => {
               <div className="flex w-full max-w-xs flex-col gap-4 md:max-w-sm md:flex-row md:items-center">
                 <button
                   onClick={handleDraw}
+                  disabled={isPlaying || settings.continuousDraw}
                   className="flex-1 transform rounded-lg bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-4 text-lg font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300 md:px-8 md:text-xl"
                 >
                   {drawnNumbers.length === 0 ? (
@@ -269,6 +275,12 @@ export const BingoDraw = () => {
       {settings.continuousDraw && (
         <div className="fixed bottom-20 left-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
           Sorteio automático ativo
+        </div>
+      )}
+      {isPlaying && (
+        <div className="fixed bottom-20 left-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+          <div className="w-4 h-4 border-t-2 border-white rounded-full animate-spin"></div>
+          Reproduzindo...
         </div>
       )}
     </div>
