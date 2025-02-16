@@ -17,7 +17,7 @@ export const BingoDraw = () => {
   const [ showNumbersModal, setShowNumbersModal ] = useState(false);
   const [ winners, setWinners ] = useState<Winner[]>([]);
   const [ selectedNumbers, setSelectedNumbers ] = useState<number[]>([]);
-  const [ settings, setSettings ] = useState<Settings>(SettingsService);
+  const [ settings, setSettings ] = useState<Settings>(SettingsService.getSettings);
   const [ isPlaying, setIsPlaying ] = useState(false);
 
   useEffect(() => {

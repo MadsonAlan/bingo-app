@@ -1,5 +1,13 @@
-export const SettingsService = () => {
-  if (typeof window !== "undefined") {
-    return JSON.parse(localStorage.getItem('bingoSettings') || '{ volume: Math.floor(1), theme: "light", autoRepeat: false, continuousDraw: false }')
+import { Settings } from "@/types/menuTypes";
+
+export class SettingsService {
+  static getSettings(): Settings {
+    return typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("bingoSettings") as string)
+      : {
+          volume: 1,
+          autoRepeat: false,
+          continuousDraw: false,
+        };
   }
-};
+}
