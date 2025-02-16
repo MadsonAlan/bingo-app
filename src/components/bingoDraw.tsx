@@ -74,7 +74,7 @@ export const BingoDraw = () => {
     setDrawnNumbers(bingoService.getDrawnNumbers());
     // Reproduzir áudio com controle de volume
     try {
-      const audio = new Audio(`sounds/numerosSorteados/${drawResult.column}${drawResult.number}.mp3`);
+      const audio = new Audio(`/sounds/numerosSorteados/${drawResult.column}${drawResult.number}.mp3`);
       audio.volume = settings.volume;
       // Reprodução principal
       await audio.play();
