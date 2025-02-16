@@ -1,6 +1,6 @@
 // src/services/audioService.ts
 export class AudioService {
-  private static readonly BASE_PATH = 'sounds/numerosSorteados';
+  private static readonly BASE_PATH = '/sounds/numerosSorteados';
 
   static playNumber(column: string, number: number) {
     return new Promise<void>((resolve) => {
