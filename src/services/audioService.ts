@@ -3,16 +3,13 @@ export class AudioService {
   private static readonly BASE_PATH = '/sounds/numerosSorteados';
 
   static playNumber(column: string, number: number) {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>(() => {
       const audioPath = `${this.BASE_PATH}/${column}${number}.mp3`;
       const audio = new Audio(audioPath);
       
-      audio.addEventListener('canplaythrough', () => audio.play());
-      audio.addEventListener('ended', () => resolve());
-      audio.addEventListener('error', (e) => {
-        console.error(`Erro ao reproduzir ${audioPath}:`, e);
+      audio.play().catch((error) => {
         this.fallbackTTS(column, number);
-        resolve();
+        console.error('Erro na reprodução de áudio:', error);
       });
     });
   }
