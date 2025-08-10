@@ -95,4 +95,4 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull r
 
 ---
 
-Feito com ❤️ por
+Feito com ❤️ por [Madson Alan](https://github.com/MadsonAlan)
